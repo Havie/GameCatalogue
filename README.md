@@ -1,2 +1,2 @@
 # GameCatalogue
- local .NET and Blazor application to simulate a video game catalogue
+ Local .NET and Blazor SPA application to simulate a video game catalogue. 
