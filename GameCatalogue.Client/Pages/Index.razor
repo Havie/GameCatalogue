@@ -1,7 +1,46 @@
 ﻿@page "/"
+@using Models
+<PageTitle>Game Catalogue</PageTitle>
 
-<PageTitle>Index</PageTitle>
+<h1>Game Catalogue</h1>
 
-<h1>Hello, world!</h1>
+<table>
+	<thead>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Genre</th>
+		<th>Price</th>
+		<th>Release Date</th>
+		<th></th>
+	</thead>
+	<tbody>
+		<!-- C# section-->
+		@foreach (var game in games)
+		{
+			<tr>
+				<td>@game.Id</td><!-- @game is a C# variable exposed by at sign-->	
+				<td>@game.GameName</td>
+				<td>@game.Genre</td>
+				<td>$@game.Price</td>
+				<td>@game.ReleaseDate.ToString("MM/dd/yyyy")</td>
+				<td><button class="btn btn-primary">Edit</button></td>	
+			</tr>
+		}
+	</tbody>
+</table>
 
-Welcome to your new app.
+<!-- Code section for C#-->
+@code
+{
+	private Game[] games = new[]
+	{
+		//Static example data
+		//If formatting is fucking up from IDE, set "editor.formatOnSave": false, in settings.json
+		new Game() { Id = 1, GameName = "Super Mario", Genre = "Platformer", Price = 59.99m, ReleaseDate = new DateTime(1985,9,13)},
+		new Game() { Id = 1, GameName = "Street Fighter", Genre = "Fighting", Price = 59.99m, ReleaseDate = new DateTime(1991,2,1)},
+		new Game() { Id = 1, GameName = "Notoris: The Goblin War", Genre = "Strategy", Price = 4.99m, ReleaseDate = new DateTime(2021,7, 1)},
+	};
+}
+
+
+```
