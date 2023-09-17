@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qvE3JQoRRgkw72xkdwXDWPYdGOXDZx61COHRJiWzMgEx+tAYudWitV6flhmo3WQ8A/3Dph5yh61OxsYaIx7rGA==",
+  "dgSpecHash": "hsrhUMVqLF4aTuKEskmIMyZl0Xg/kYHhR5SXvTvm2BK7U4MI7/v+lT71Q6mDbiqhf5FewrKKwQmTc4TjZY/58A==",
   "success": true,
   "projectFilePath": "C:\\Users\\Steve\\Documents\\github\\DotNetProjects\\GameCatalogue\\GameCatalogue.Client\\GameCatalogue.Client.csproj",
   "expectedPackageFiles": [
@@ -31,7 +31,7 @@
     "C:\\Users\\Steve\\.nuget\\packages\\system.io.pipelines\\7.0.0\\system.io.pipelines.7.0.0.nupkg.sha512",
     "C:\\Users\\Steve\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
     "C:\\Users\\Steve\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
-    "C:\\Users\\Steve\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.10\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.10.nupkg.sha512"
+    "C:\\Users\\Steve\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.11\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.11.nupkg.sha512"
   ],
   "logs": []
 }
