@@ -11,7 +11,7 @@
 {
 	<p><em>Loading...</em></p>
 }
-else
+else 
 {
 	<div class="row"> 
 		<div class="col-sm-4"> <!-- Read about this on bootstrap pg --> 
@@ -57,7 +57,8 @@ else
 	private Game? game ; // "the editable game for the user to fill out"
 	
 	private string pageTitle = string.Empty;
-    protected override void OnParametersSet() //invoked as soon as [Parameter]'s' are set from Razor
+
+   protected override void OnParametersSet() //invoked as soon as [Parameter]'s' are set from Razor
     {
       if(GameID is null) //if no game id, then we are creating a new game	
 		{

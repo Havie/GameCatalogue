@@ -38,4 +38,10 @@ public static class GameClient
     existingGame.ReleaseDate = updatedGame.ReleaseDate;
   }
 
+  public static void DeleteGame(int gameID)
+ {
+    var existingGame = GetGame(gameID); //throws an exception if not found
+    _games.Remove(existingGame);  
+ }
+
 }

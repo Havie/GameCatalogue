@@ -19,6 +19,14 @@
 }
 else
 {
+	<DeleteGame Game="@currentGame" OnClose="@OnDeleteModalClosed">
+		<!-- DeleteGame is a component defined in DeleteGame.razor 
+		 not sure why we define in like this?
+		 for ex: if DeleteGame.razor has a <h3> tag defined, it displays text above our table.
+		-->
+	</DeleteGame>
+
+
 	<table class="table table-striped table-bordered table-hover">
 		<thead class="table-dark">
 			<th>Id</th>
@@ -42,6 +50,9 @@ else
 						<button class="btn btn-primary"  @onclick="(() => EditGame(game.Id))">  <!-- I cant believe how gross Lamba syntax is inside of a string-->
 							<i class="oi oi-pencil"></i>  	<!-- from css/open-iconinic folder : https://icon-sets.iconify.design/oi/-->
 						</button>
+						<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" @onclick="(() => currentGame = game)"> <!-- "#deleteModal" toggles id="deleteModal" defined in DeleteGame.razor-->	
+							<i class="oi oi-x"></i>  
+						</button>
 					</td>	
 				</tr>
 			}
@@ -53,6 +64,7 @@ else
 @code
 {
 	private Game[]? games; //Nullable array on construction
+	private Game? currentGame;
 
     protected override void OnInitialized()
     {
@@ -67,6 +79,15 @@ else
 	 private void EditGame(int gameID)
 	 {
 		NavigationManager.NavigateTo($"/game/{gameID}"); //defined at top of EditGame.razor @page
+	 }
+
+	 private void OnDeleteModalClosed(bool cond)
+	 {
+		if(cond)
+		{
+			GameClient.DeleteGame(currentGame!.Id);
+			games = GameClient.GetGames();
+		}
 	 }
 
 }
