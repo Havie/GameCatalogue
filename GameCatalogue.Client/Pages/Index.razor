@@ -37,8 +37,12 @@ else
 					<td>@game.GameName</td>
 					<td>@game.Genre</td>
 					<td>$@game.Price</td>
-					<td>@game.ReleaseDate.ToString("MM/dd/yyyy")</td>
-					<td><button class="btn btn-primary">Edit</button></td>	
+					<td>@game.ReleaseDate.ToString("MM/dd/yyyy")</td> 	
+					<td>
+						<button class="btn btn-primary"  @onclick="(() => EditGame(game.Id))">  <!-- I cant believe how gross Lamba syntax is inside of a string-->
+							<i class="oi oi-pencil"></i>  	<!-- from css/open-iconinic folder : https://icon-sets.iconify.design/oi/-->
+						</button>
+					</td>	
 				</tr>
 			}
 		</tbody>
@@ -58,6 +62,11 @@ else
 	 private void CreateGame()
 	 {
 		NavigationManager.NavigateTo("/game"); //defined at top of EditGame.razor @page
+	 }
+
+	 private void EditGame(int gameID)
+	 {
+		NavigationManager.NavigateTo($"/game/{gameID}"); //defined at top of EditGame.razor @page
 	 }
 
 }

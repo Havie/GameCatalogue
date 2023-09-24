@@ -16,6 +16,11 @@ public static class GameClient
         new Game() { Id = 3, GameName = "Notoris: The Goblin War", Genre = "Strategy", Price = 4.99m, ReleaseDate = new DateTime(2021,7, 1)},
   };
 
+  public static Game GetGame(int gameID)
+  {
+    return _games.Find(game => game.Id == gameID) ?? throw new Exception($"Game with id #{gameID} not found");
+  }
+
   public static void AddGame(Game newGame) 
   {
       //newGame.Id = _games.Count;
@@ -23,5 +28,14 @@ public static class GameClient
      _games.Add(newGame);
   }
 
+  public static void UpdateGame(Game updatedGame)
+  {
+    var existingGame = GetGame(updatedGame.Id); //throws an exception if not found
+    //Update the existing games fields with the new values
+    existingGame.GameName = updatedGame.GameName;
+    existingGame.Genre = updatedGame.Genre;
+    existingGame.Price = updatedGame.Price;
+    existingGame.ReleaseDate = updatedGame.ReleaseDate;
+  }
 
 }

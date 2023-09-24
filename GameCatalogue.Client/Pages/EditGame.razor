@@ -1,59 +1,104 @@
 ﻿@page "/game"
+@page "/game/{GameID:int}" //how we navigate to this page when editing an existing game
 @using Models
 @inject NavigationManager NavigationManager
 
-<PageTitle>New Game</PageTitle>
+<PageTitle>@pageTitle</PageTitle>
 <h1> Game Catalogue</h1>
-<h3>New Game</h3>
+<h3>@pageTitle</h3>
 
-<div class="row"> 
-	<div class="col-sm-4"> <!-- Read about this on bootstrap pg --> 
-		<EditForm Model="@game" OnValidSubmit = "HandleSubmit"> <!-- pass editable game class into HandleSubmit func --> 
-		<DataAnnotationsValidator/> <!-- validates data annotations in game class required fields -->
-		<ValidationSummary /> <!-- displays validation summary of whats invalid-->
-				<div class="mb-3"> <!-- margin bottom 3 below --> 
-					<label for="GameName" class="form-label">Game Name:</label>
-					<InputText id="GameName" @bind-Value="@game.GameName" class="form-control"></InputText>
-				</div>
-				<div class="mb-3">
-					<label for="Genre" class="form-label">Genre:</label>
-					<InputSelect id="Genre" @bind-Value="@game.Genre" class="form-select">
-						<option value="">Select Genre</option> <!-- default value -->
-						<option>Action</option>
-						<option>Adventure</option>
-						<option>Horror</option>
-						<option>Shooter</option>
-						<option>Strategy</option>
-						<option>Survival</option>
-						<option>Platformer</option>
-					</InputSelect>
-				</div>
-				<div class="mb-3">
-					<label for="Price" class="form-label">Price(USD):</label>
-					<InputNumber id="Price" @bind-Value="@game.Price" class="form-control"></InputNumber>
-				</div>
-				<div class="mb-3">
-					<label for="ReleaseDate" class="form-label">ReleaseDate:</label>
-					<InputDate id="ReleaseDate" @bind-Value="@game.ReleaseDate" class="form-control"></InputDate>
-				</div>
-				<button type="submit" class="btn btn-primary">Save</button>
-				<button type="button" class="btn btn-secondary" @onclick="NavigateBackToHomePage">Cancel</button>
-		</EditForm>
+@if (game is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<div class="row"> 
+		<div class="col-sm-4"> <!-- Read about this on bootstrap pg --> 
+			<EditForm Model="@game" OnValidSubmit = "HandleSubmit"> <!-- pass editable game class into HandleSubmit func --> 
+			<DataAnnotationsValidator/> <!-- validates data annotations in game class required fields -->
+			<ValidationSummary /> <!-- displays validation summary of whats invalid-->
+					<div class="mb-3"> <!-- margin bottom 3 below --> 
+						<label for="GameName" class="form-label">Game Name:</label>
+						<InputText id="GameName" @bind-Value="@game.GameName" class="form-control"></InputText>
+					</div>
+					<div class="mb-3">
+						<label for="Genre" class="form-label">Genre:</label>
+						<InputSelect id="Genre" @bind-Value="@game.Genre" class="form-select">
+							<option value="">Select Genre</option> <!-- default value -->
+							<option>Action</option>
+							<option>Adventure</option>
+							<option>Horror</option>
+							<option>Shooter</option>
+							<option>Strategy</option>
+							<option>Survival</option>
+							<option>Platformer</option>
+						</InputSelect>
+					</div>
+					<div class="mb-3">
+						<label for="Price" class="form-label">Price(USD):</label>
+						<InputNumber id="Price" @bind-Value="@game.Price" class="form-control"></InputNumber>
+					</div>
+					<div class="mb-3">
+						<label for="ReleaseDate" class="form-label">ReleaseDate:</label>
+						<InputDate id="ReleaseDate" @bind-Value="@game.ReleaseDate" class="form-control"></InputDate>
+					</div>
+					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="button" class="btn btn-secondary" @onclick="NavigateBackToHomePage">Cancel</button>
+			</EditForm>
+		</div>
 	</div>
-</div>
-
+}
 @code {
-	private Game game = new () // "the editable game for the user to fill out"
-	{
-		//Default starting values
-		GameName = string.Empty,
-		Genre = string.Empty,
-		ReleaseDate = DateTime.UtcNow,
-	};
+
+	[Parameter]
+	public int? GameID {get; set;}
+
+	private Game? game ; // "the editable game for the user to fill out"
+	
+	private string pageTitle = string.Empty;
+    protected override void OnParametersSet() //invoked as soon as [Parameter]'s' are set from Razor
+    {
+      if(GameID is null) //if no game id, then we are creating a new game	
+		{
+			Game game = new () 
+			{
+				//Default starting values
+				Id = -1,
+				GameName = string.Empty,
+				Genre = string.Empty,
+				ReleaseDate = DateTime.UtcNow,
+			};
+			pageTitle = "New Game";
+		}
+		else // Edit exising game
+		{
+			Game foundGame = GameClient.GetGame(GameID.Value);
+			//Make a copy so not directly edited until submitted
+			game = new()
+			{
+				Id = foundGame.Id,
+				GameName = foundGame.GameName,
+				Genre = foundGame.Genre,
+				Price = foundGame.Price,
+				ReleaseDate = foundGame.ReleaseDate,	
+			};
+			pageTitle = $"Edit {game.GameName}";
+		}
+    }
+
+    
 
 	private void HandleSubmit()
 	{
-		GameClient.AddGame(game);
+		if(game!.Id == -1) //! means wont be null (compiler)
+		{
+			GameClient.AddGame(game);
+		}
+		else	
+		{
+			GameClient.UpdateGame(game);
+		}
 		NavigateBackToHomePage();
 	}
 	private void NavigateBackToHomePage()
@@ -61,3 +106,4 @@
 		NavigationManager.NavigateTo("/"); //back to home page
 	}
 }
+
