@@ -1,6 +1,16 @@
 ﻿@page "/"
 @using Models
+@inject NavigationManager NavigationManager
+
+
+
 <PageTitle>Game Catalogue</PageTitle>
+
+<div class="row mb-4">
+	<div class="col-sm-6">
+		<button type ="button" class="btn btn-primary" @onclick="CreateGame">Create New Game</button>
+	</div>
+</div>
 
 <h1>Game Catalogue</h1>
 @if (games is null)
@@ -45,8 +55,12 @@ else
       games = GameClient.GetGames();
     }
 
+	 private void CreateGame()
+	 {
+		NavigationManager.NavigateTo("/game"); //defined at top of EditGame.razor @page
+	 }
+
 }
 
 
-```
 

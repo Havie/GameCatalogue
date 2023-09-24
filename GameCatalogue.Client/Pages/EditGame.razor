@@ -1,5 +1,6 @@
 ﻿@page "/game"
 @using Models
+@inject NavigationManager NavigationManager
 
 <PageTitle>New Game</PageTitle>
 <h1> Game Catalogue</h1>
@@ -7,14 +8,25 @@
 
 <div class="row"> 
 	<div class="col-sm-4"> <!-- Read about this on bootstrap pg --> 
-		<EditForm Model="@game"> <!-- margin bottom 3 below --> 
-				<div class="mb-3">
+		<EditForm Model="@game" OnValidSubmit = "HandleSubmit"> <!-- pass editable game class into HandleSubmit func --> 
+		<DataAnnotationsValidator/> <!-- validates data annotations in game class required fields -->
+		<ValidationSummary /> <!-- displays validation summary of whats invalid-->
+				<div class="mb-3"> <!-- margin bottom 3 below --> 
 					<label for="GameName" class="form-label">Game Name:</label>
 					<InputText id="GameName" @bind-Value="@game.GameName" class="form-control"></InputText>
 				</div>
 				<div class="mb-3">
 					<label for="Genre" class="form-label">Genre:</label>
-					<InputText id="Genre" @bind-Value="@game.Genre" class="form-control"></InputText>
+					<InputSelect id="Genre" @bind-Value="@game.Genre" class="form-select">
+						<option value="">Select Genre</option> <!-- default value -->
+						<option>Action</option>
+						<option>Adventure</option>
+						<option>Horror</option>
+						<option>Shooter</option>
+						<option>Strategy</option>
+						<option>Survival</option>
+						<option>Platformer</option>
+					</InputSelect>
 				</div>
 				<div class="mb-3">
 					<label for="Price" class="form-label">Price(USD):</label>
@@ -24,16 +36,28 @@
 					<label for="ReleaseDate" class="form-label">ReleaseDate:</label>
 					<InputDate id="ReleaseDate" @bind-Value="@game.ReleaseDate" class="form-control"></InputDate>
 				</div>
+				<button type="submit" class="btn btn-primary">Save</button>
+				<button type="button" class="btn btn-secondary" @onclick="NavigateBackToHomePage">Cancel</button>
 		</EditForm>
 	</div>
 </div>
 
 @code {
-	private Game game = new ()
+	private Game game = new () // "the editable game for the user to fill out"
 	{
 		//Default starting values
 		GameName = string.Empty,
 		Genre = string.Empty,
 		ReleaseDate = DateTime.UtcNow,
 	};
+
+	private void HandleSubmit()
+	{
+		GameClient.AddGame(game);
+		NavigateBackToHomePage();
+	}
+	private void NavigateBackToHomePage()
+	{
+		NavigationManager.NavigateTo("/"); //back to home page
+	}
 }
