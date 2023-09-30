@@ -1,0 +1,4 @@
+
+# Link LaunchSettings.json url to our entry in Program.cs on game server for a GET method -->
+# has to do with Huachao Mao's REST client Extension for VSCODE-->
+GET  http://localhost:5030/games
