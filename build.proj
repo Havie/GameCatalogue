@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.Build.Traversal/3.2.0">
+  <ItemGroup>
+    <!-- Build all projects recursively under the root folder I.E so we can build Client/Server at same time -->
+    <ProjectReference Include="**\*.*proj" />
+  </ItemGroup>
+</Project>
