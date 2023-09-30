@@ -17,10 +17,19 @@ string urlRoute = "/games";
 string getNameAPIFuncRouteEndpointStr = "GetGame";
 var routeGroup = app.MapGroup(urlRoute);
 
-//GET /games
+//POST /games   (create)
+routeGroup.MapPost("/", (Game game) =>
+{
+   game.Id = _games.Max(x => x.Id) + 1; //instead of using count, find the largest ID and add one to it.
+   _games.Add(game);
+   //return the name of route that can be used to get the new game aka --> GET /games/{id}
+   return Results.CreatedAtRoute(getNameAPIFuncRouteEndpointStr, new {id = game.Id} , game);
+});
+
+//GET /games (read)
 routeGroup.MapGet("/", () => _games);
 
-//GET /games/{id}
+//GET /games/{id} (read)
 routeGroup.MapGet("/{id}", (int id) =>
 {
    Game? game = _games.Find(game => game.Id == id);
@@ -32,13 +41,25 @@ routeGroup.MapGet("/{id}", (int id) =>
 })
 .WithName(getNameAPIFuncRouteEndpointStr);
 
-//POST /games
-routeGroup.MapPost("/", (Game game) =>
+
+//PUT /games/{id} (update)
+routeGroup.MapPut("/{id}", (int id, Game updatedGame) =>
 {
-   game.Id = _games.Max(x => x.Id) + 1; //instead of using count, find the largest ID and add one to it.
-   _games.Add(game);
-   //return the name of route that can be used to get the new game aka --> GET /games/{id}
-   return Results.CreatedAtRoute(getNameAPIFuncRouteEndpointStr, new {id = game.Id} , game);
+    Game? game = _games.Find(game => game.Id == id);
+    if(game is null)
+    {
+        //we could create one with the new id, or return a 404 instead
+        //return Results.NotFound();
+        updatedGame.Id  = id;
+        _games.Add(updatedGame);
+        return Results.CreatedAtRoute(getNameAPIFuncRouteEndpointStr, new {id = updatedGame.Id} , updatedGame);
+    }
+    //Update the existing games fields with the new values
+    game.GameName = updatedGame.GameName;
+    game.Genre = updatedGame.Genre;
+    game.Price = updatedGame.Price;
+    game.ReleaseDate = updatedGame.ReleaseDate;
+    return Results.NoContent(); //could also return Results.Ok(game) but apparently this is the convention
 });
 
 app.Run();

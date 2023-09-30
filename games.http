@@ -18,3 +18,14 @@ content-type: application/json
   "price": 19.99,
   "releaseDate": "2001-01-11"
 }
+
+### 
+PUT {{baseURL}}/games/1
+content-type: application/json
+
+{
+  "gameName": "Updated Game 1",
+  "genre": "Platformer",
+  "price": 39.99,
+  "releaseDate": "2023-09-30"
+}
