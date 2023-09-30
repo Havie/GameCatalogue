@@ -16,6 +16,7 @@ var app = builder.Build();
 string urlRoute = "/games";
 string getNameAPIFuncRouteEndpointStr = "GetGame";
 var routeGroup = app.MapGroup(urlRoute);
+routeGroup.WithParameterValidation(); //Server side validation thru MinimalApis.Extensions which enforces [Required] attribute tags, appllies to all endpoints in this group
 
 //POST /games   (create)
 routeGroup.MapPost("/", (Game game) =>
