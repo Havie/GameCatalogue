@@ -62,4 +62,18 @@ routeGroup.MapPut("/{id}", (int id, Game updatedGame) =>
     return Results.NoContent(); //could also return Results.Ok(game) but apparently this is the convention
 });
 
+//DELETE /games/{id} (delete)
+routeGroup.MapDelete("/{id}", (int id) =>
+{
+    Game? game = _games.Find(game => game.Id == id);
+    if(game is null)
+    {
+      //Can return either a 404 or a 204 
+      return Results.NotFound();
+      //return Results.NoContent();
+    }
+    _games.Remove(game);
+    return Results.NoContent();
+});
+
 app.Run();

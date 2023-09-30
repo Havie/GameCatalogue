@@ -29,3 +29,6 @@ content-type: application/json
   "price": 39.99,
   "releaseDate": "2023-09-30"
 }
+
+### 
+DELETE {{baseURL}}/games/2
