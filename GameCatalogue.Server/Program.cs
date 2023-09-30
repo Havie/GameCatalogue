@@ -13,12 +13,13 @@ List<Game> _games = new()
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
+var routeGroup = app.MapGroup("/games");
 
 //GET /games
-app.MapGet("/games", () => _games);
+routeGroup.MapGet("/", () => _games);
 
 //GET /games/{id}
-app.MapGet("/games/{id}", (int id) =>
+routeGroup.MapGet("/{id}", (int id) =>
 {
    Game? game = _games.Find(game => game.Id == id);
    if(game is null)
