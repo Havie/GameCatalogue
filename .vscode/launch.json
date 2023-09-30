@@ -1,13 +1,45 @@
 {
   "version": "0.2.0",
   "configurations": [
+    //CLIENT:
     {
-      "name": "Launch and Debug Standalone Blazor WebAssembly App",
+      "name": "Launch and Debug Blazor WebAssembly CLIENT",
       "type": "blazorwasm",
       "request": "launch",
       "cwd": "${workspaceFolder}/GameCatalogue.Client",
       "url": "http://localhost:5291",
       "browser": "chrome",
+    },
+    //SERVER:
+    {
+      // Use IntelliSense to find out which attributes exist for C# debugging
+      // Use hover for the description of the existing attributes
+      // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+      "name": "Launch and Debug .NET Core SERVER (web)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/GameCatalogue.Server/bin/Debug/net7.0/GameCatalogue.Server.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/GameCatalogue.Server",
+      "stopAtEntry": false,
+      // Disabled launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+      // "serverReadyAction": {
+      //   "action": "openExternally",
+      //   "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      // },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach"
     }
   ]
 }
