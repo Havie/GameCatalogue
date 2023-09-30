@@ -25,7 +25,7 @@ else
 					<div class="mb-3">
 						<label for="Genre" class="form-label">Genre:</label>
 						<InputSelect id="Genre" @bind-Value="@game.Genre" class="form-select">
-							<option value="">Select Genre</option> <!-- default value -->
+							<option value=@string.Empty>Select Genre</option> <!-- default value -->
 							<option>Action</option>
 							<option>Adventure</option>
 							<option>Horror</option>
@@ -62,7 +62,7 @@ else
     {
       if(GameID is null) //if no game id, then we are creating a new game	
 		{
-			Game game = new () 
+			game = new () 
 			{
 				//Default starting values
 				Id = -1,
