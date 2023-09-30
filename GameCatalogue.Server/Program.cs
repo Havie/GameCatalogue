@@ -13,7 +13,9 @@ List<Game> _games = new()
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-var routeGroup = app.MapGroup("/games");
+string urlRoute = "/games";
+string getNameAPIFuncRouteEndpointStr = "GetGame";
+var routeGroup = app.MapGroup(urlRoute);
 
 //GET /games
 routeGroup.MapGet("/", () => _games);
@@ -27,7 +29,16 @@ routeGroup.MapGet("/{id}", (int id) =>
       return Results.NotFound();
    }
    return Results.Ok(game);
-});
+})
+.WithName(getNameAPIFuncRouteEndpointStr);
 
+//POST /games
+routeGroup.MapPost("/", (Game game) =>
+{
+   game.Id = _games.Max(x => x.Id) + 1; //instead of using count, find the largest ID and add one to it.
+   _games.Add(game);
+   //return the name of route that can be used to get the new game aka --> GET /games/{id}
+   return Results.CreatedAtRoute(getNameAPIFuncRouteEndpointStr, new {id = game.Id} , game);
+});
 
 app.Run();
