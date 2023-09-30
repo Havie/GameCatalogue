@@ -17,4 +17,16 @@ var app = builder.Build();
 //GET /games
 app.MapGet("/games", () => _games);
 
+//GET /games/{id}
+app.MapGet("/games/{id}", (int id) =>
+{
+   Game? game = _games.Find(game => game.Id == id);
+   if(game is null)
+   {
+      return Results.NotFound();
+   }
+   return Results.Ok(game);
+});
+
+
 app.Run();
