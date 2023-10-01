@@ -1,5 +1,16 @@
 {
   "version": "0.2.0",
+  //COMPOUND CONFIGURATION (launch both for debugging):
+  "compounds": [
+    {
+      "name": "Launch and Debug CLIENT and SERVER",
+      "configurations": [
+        "Launch and Debug Blazor WebAssembly CLIENT",
+        "Launch and Debug .NET Core SERVER (web)"
+      ],
+      "preLaunchTask": "build" //has to build first, then launch
+    }
+  ],
   "configurations": [
     //CLIENT:
     {
