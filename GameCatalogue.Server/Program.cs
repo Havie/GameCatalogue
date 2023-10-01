@@ -1,5 +1,6 @@
 using GameCatalogue.Server.Models;
 
+/*******************************************************************************/
 //Server side games 
 List<Game> _games = new() 
   {
@@ -8,16 +9,26 @@ List<Game> _games = new()
         new Game() { Id = 2, GameName = "Street Fighter", Genre = "Fighting", Price = 59.99m, ReleaseDate = new DateTime(1991,2,1)},
         new Game() { Id = 3, GameName = "Notoris: The Goblin War", Genre = "Strategy", Price = 4.99m, ReleaseDate = new DateTime(2021,7, 1)},
   };
-
+/*******************************************************************************/
 
 
 var builder = WebApplication.CreateBuilder(args);
+//configure CORS - cross origin resource sharing / requests
+builder.Services.AddCors(options => options.AddDefaultPolicy
+  (
+    //allow our GameClient to make requests to this server, defined in GameCatalogue.Client -> Properties -> launchSettings.json -> profiles -> applicationUrl
+    builder => builder.WithOrigins("http://localhost:5291").AllowAnyHeader().AllowAnyMethod()
+  ));
+
 var app = builder.Build();
+app.UseCors(); //use the CORS policy defined above
 string urlRoute = "/games";
 string getNameAPIFuncRouteEndpointStr = "GetGame";
 var routeGroup = app.MapGroup(urlRoute);
 routeGroup.WithParameterValidation(); //Server side validation thru MinimalApis.Extensions which enforces [Required] attribute tags, appllies to all endpoints in this group
 
+
+/*******************************************************************************/
 //POST /games   (create)
 routeGroup.MapPost("/", (Game game) =>
 {
