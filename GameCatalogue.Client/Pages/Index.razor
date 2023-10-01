@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Models
 @inject NavigationManager NavigationManager
+@inject GameClient GameClient
 
 
 
@@ -19,7 +20,7 @@
 }
 else
 {
-	<DeleteGame Game="@currentGame" OnClose="@OnDeleteModalClosed">
+	<DeleteGame Game="@currentGame" OnClose="@OnDeleteModalClosedAsync">
 		<!-- DeleteGame is a component defined in DeleteGame.razor 
 		 not sure why we define in like this?
 		 for ex: if DeleteGame.razor has a <h3> tag defined, it displays text above our table.
@@ -66,9 +67,10 @@ else
 	private Game[]? games; //Nullable array on construction
 	private Game? currentGame;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-      games = GameClient.GetGames();
+		//when you await a task, it returns the .Result automatically as the specified Type aka Game[] (which is nullable)
+      games = await GameClient.GetGamesAsync();
     }
 
 	 private void CreateGame()
@@ -81,12 +83,12 @@ else
 		NavigationManager.NavigateTo($"/game/{gameID}"); //defined at top of EditGame.razor @page
 	 }
 
-	 private void OnDeleteModalClosed(bool cond)
+	 private async Task OnDeleteModalClosedAsync(bool cond)
 	 {
 		if(cond)
 		{
-			GameClient.DeleteGame(currentGame!.Id);
-			games = GameClient.GetGames();
+			await GameClient.DeleteGameAsync(currentGame!.Id);
+			games = await GameClient.GetGamesAsync();
 		}
 	 }
 
