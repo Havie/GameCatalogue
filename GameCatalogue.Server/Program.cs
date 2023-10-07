@@ -1,4 +1,5 @@
 using GameCatalogue.Server.Models;
+using GameCatalogue.Server.Data;
 
 /*******************************************************************************/
 //Server side games 
@@ -20,7 +21,9 @@ builder.Services.AddCors(options => options.AddDefaultPolicy
     builder => builder.WithOrigins("http://localhost:5291").AllowAnyHeader().AllowAnyMethod()
   ));
 // instead of getting the key from appsettings.json "ConnectionStrings" section, get it from Secret Manager which is run thru readme.
-var connString = builder.Configuration.GetConnectionString("GameStoreContext");
+var connString = builder.Configuration.GetConnectionString("GameCatalogueContext");
+//inject the GameCatalogueContext Entity Framework as a service
+builder.Services.AddSqlServer<GameCatalogueContext>(connString);
 
 var app = builder.Build();
 app.UseCors(); //use the CORS policy defined above

@@ -9,6 +9,8 @@
  + CRUD 
  + Docker
  + SQL
+ + Secret Manager for passwords
+ + Entity Framework Core (cross plantform ORM mapper)
 
 
  ## Starting SQL server Docker container
@@ -22,5 +24,5 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=HereIsALongPass*!" -p 1433:1
  ## Setting the connection string via Secret Manager
   ```powershell
   # instead of being in appsettings.json:
-dotnet user-secrets set "ConnectionStrings:GameStoreContext" "Server=localhost; Database=GameStore; User Id=sa ; Password=HereIsALongPass*!; TrustServerCertificate=True;"
+dotnet user-secrets set "ConnectionStrings:GameCatalogueContext" "Server=localhost; Database=GameStore; User Id=sa ; Password=HereIsALongPass*!; TrustServerCertificate=True;"
   ```
