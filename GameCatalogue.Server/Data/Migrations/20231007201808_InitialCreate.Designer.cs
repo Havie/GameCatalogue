@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameCatalogue.Server.Data.Migrations
 {
     [DbContext(typeof(GameCatalogueContext))]
-    [Migration("20231007200824_InitialCreate")]
+    [Migration("20231007201808_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

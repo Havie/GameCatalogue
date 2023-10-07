@@ -12,10 +12,11 @@ namespace GameCatalogue.Server.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Games", //property name of the DbSet<Game> Games => Set<Game>(); in GameCatalogueContext.cs
+                name: "Games",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"), //auto increment the game ID
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     GameName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Genre = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -30,7 +31,8 @@ namespace GameCatalogue.Server.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable( name: "Games");
+            migrationBuilder.DropTable(
+                name: "Games");
         }
     }
 }
