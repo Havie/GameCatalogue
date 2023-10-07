@@ -13,7 +13,7 @@ namespace GameCatalogue.Server.Data;
         
       }
       /*****************************************************************************/
-      //property with a getter/setter 
+      //property with a getter/setter [expression-bodied member and it was introduced in C# 6.0]
       public DbSet<Game> Games => Set<Game>();
 
       protected override void OnModelCreating(ModelBuilder modelBuilder)
