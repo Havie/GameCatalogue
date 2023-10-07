@@ -19,6 +19,8 @@ builder.Services.AddCors(options => options.AddDefaultPolicy
     //allow our GameClient to make requests to this server, defined in GameCatalogue.Client -> Properties -> launchSettings.json -> profiles -> applicationUrl
     builder => builder.WithOrigins("http://localhost:5291").AllowAnyHeader().AllowAnyMethod()
   ));
+// instead of getting the key from appsettings.json "ConnectionStrings" section, get it from Secret Manager which is run thru readme.
+var connString = builder.Configuration.GetConnectionString("GameStoreContext");
 
 var app = builder.Build();
 app.UseCors(); //use the CORS policy defined above
