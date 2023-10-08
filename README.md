@@ -25,7 +25,7 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=HereIsALongPass*!" -p 1433:1
   # instead of being in appsettings.json:
 dotnet user-secrets set "ConnectionStrings:GameCatalogueContext" "Server=localhost; Database=GameStore; User Id=sa ; Password=HereIsALongPass*!; TrustServerCertificate=True;"
   ```
-
+ ## Screenshots
   ![](Images/Home_GameCatalogue.PNG)
   ![](Images/NewGame.PNG)
   ![](Images/DeleteModal.PNG)
