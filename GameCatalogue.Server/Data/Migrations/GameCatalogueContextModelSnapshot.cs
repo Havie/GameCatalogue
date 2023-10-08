@@ -41,6 +41,7 @@ namespace GameCatalogue.Server.Data.Migrations
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("ReleaseDate")

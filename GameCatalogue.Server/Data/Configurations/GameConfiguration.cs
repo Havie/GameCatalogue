@@ -8,9 +8,10 @@ namespace GameCatalogue.Server.Data.Configurations;
   {
       public void Configure(EntityTypeBuilder<Game> builder)
       {
-          builder.Property(g => g.GameName).IsRequired().HasMaxLength(50);
-          builder.Property(g => g.Genre).IsRequired().HasMaxLength(25);
-          builder.Property(g => g.Price).IsRequired().HasColumnType("decimal(18,2)");
-          builder.Property(g => g.ReleaseDate).IsRequired();
+          builder.Property(g => g.Id).ValueGeneratedOnAdd();
+          //builder.Property(g => g.GameName).IsRequired().HasMaxLength(50);
+          //builder.Property(g => g.Genre).IsRequired().HasMaxLength(25);
+          builder.Property(g => g.Price).HasPrecision(18, 2);
+          //builder.Property(g => g.ReleaseDate).IsRequired();
       }
   }

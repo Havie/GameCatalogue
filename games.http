@@ -6,7 +6,7 @@
 GET {{baseURL}}/games
 
 ### 
-GET {{baseURL}}/games/1
+GET {{baseURL}}/games/4
 
 ### 
 POST {{baseURL}}/games
@@ -31,4 +31,4 @@ content-type: application/json
 }
 
 ### 
-DELETE {{baseURL}}/games/2
+DELETE {{baseURL}}/games/1
