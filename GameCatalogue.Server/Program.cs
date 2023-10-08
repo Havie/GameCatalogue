@@ -1,4 +1,5 @@
 using GameCatalogue.Server.Models;
+using GameCatalogue.Server.Data.Configurations;
 using GameCatalogue.Server.Data;
 
 /*******************************************************************************/
