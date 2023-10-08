@@ -6,7 +6,7 @@ namespace GameCatalogue.Client.Models; //file scoped namespace! C#10 feature
 
 public class Game
 {
-  public int Id { get; set; } = -1;
+  public int Id { get; set; }
   [Required] [StringLength(50)]
   public required string GameName { get; set; } = string.Empty; //C#11 feature "required"
   [Required] [StringLength(25)]

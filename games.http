@@ -18,7 +18,7 @@ content-type: application/json
 {
   "gameName": "Test Game 1",
   "genre": "Platformer",
-  "price": 19.99,
+  "price": 29.99,
   "releaseDate": "2001-01-11"
 }
 

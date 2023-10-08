@@ -34,6 +34,7 @@ else
 							<option>Strategy</option>
 							<option>Survival</option>
 							<option>Platformer</option>
+							<option>Hack and Slash</option>
 						</InputSelect>
 					</div>
 					<div class="mb-3">
@@ -66,7 +67,7 @@ else
 			game = new () 
 			{
 				//Default starting values
-				Id = -1,
+				Id = 0, //has to be 0 to map to Entity Framework/SQL definition of default val, otherwise key wont add properly in DB
 				GameName = string.Empty,
 				Genre = string.Empty,
 				ReleaseDate = DateTime.UtcNow,
@@ -98,7 +99,7 @@ else
 
 	private async Task HandleSubmitAsync()
 	{
-		if(game!.Id == -1) //! means wont be null (compiler)
+		if(game!.Id == 0) //! means wont be null (compiler)
 		{
 			await GameClient.AddGameAsync(game);
 		}
