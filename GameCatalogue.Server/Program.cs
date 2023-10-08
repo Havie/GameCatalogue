@@ -1,16 +1,8 @@
 using GameCatalogue.Server.Models;
+using Microsoft.EntityFrameworkCore;
 using GameCatalogue.Server.Data.Configurations;
 using GameCatalogue.Server.Data;
 
-/*******************************************************************************/
-//Server side games 
-List<Game> _games = new() 
-  {
-        //example data
-        new Game() { Id = 1, GameName = "Super Mario", Genre = "Platformer", Price = 59.99m, ReleaseDate = new DateTime(1985,9,13)},
-        new Game() { Id = 2, GameName = "Street Fighter", Genre = "Fighting", Price = 59.99m, ReleaseDate = new DateTime(1991,2,1)},
-        new Game() { Id = 3, GameName = "Notoris: The Goblin War", Genre = "Strategy", Price = 4.99m, ReleaseDate = new DateTime(2021,7, 1)},
-  };
 /*******************************************************************************/
 
 
@@ -25,6 +17,8 @@ builder.Services.AddCors(options => options.AddDefaultPolicy
 var connString = builder.Configuration.GetConnectionString("GameCatalogueContext");
 //inject the GameCatalogueContext Entity Framework as a service
 builder.Services.AddSqlServer<GameCatalogueContext>(connString);
+//ChatGPT recommends: [ using using Microsoft.EntityFrameworkCore;]
+//builder.Services.AddDbContext<GameCatalogueContext>(options => options.UseSqlServer(connString));
 
 var app = builder.Build();
 app.UseCors(); //use the CORS policy defined above
@@ -36,21 +30,21 @@ routeGroup.WithParameterValidation(); //Server side validation thru MinimalApis.
 
 /*******************************************************************************/
 //POST /games   (create)
-routeGroup.MapPost("/", (Game game) =>
+routeGroup.MapPost("/", async (GameCatalogueContext context, Game game) =>
 {
-   game.Id = _games.Max(x => x.Id) + 1; //instead of using count, find the largest ID and add one to it.
-   _games.Add(game);
+   context.Games.Add(game); //db auto updates the game.Id
+   await context.SaveChangesAsync();
    //return the name of route that can be used to get the new game aka --> GET /games/{id}
    return Results.CreatedAtRoute(getNameAPIFuncRouteEndpointStr, new {id = game.Id} , game);
 });
 
 //GET /games (read)
-routeGroup.MapGet("/", () => _games);
+routeGroup.MapGet("/", async (GameCatalogueContext context) => await context.Games.AsNoTracking().ToListAsync());
 
 //GET /games/{id} (read)
-routeGroup.MapGet("/{id}", (int id) =>
+routeGroup.MapGet("/{id}", async (GameCatalogueContext context, int id) =>
 {
-   Game? game = _games.Find(game => game.Id == id);
+   Game? game = await context.Games.FindAsync(id);
    if(game is null)
    {
       return Results.NotFound();
@@ -61,37 +55,34 @@ routeGroup.MapGet("/{id}", (int id) =>
 
 
 //PUT /games/{id} (update)
-routeGroup.MapPut("/{id}", (int id, Game updatedGame) =>
+routeGroup.MapPut("/{id}",  async (GameCatalogueContext context, int id, Game updatedGame) =>
 {
-    Game? game = _games.Find(game => game.Id == id);
-    if(game is null)
+
+  //Update the existing games fields with the new values
+  var rowsAffected = await context.Games.Where(game => game.Id == id)  //oof I hate this syntax
+  .ExecuteUpdateAsync(updates =>
+      updates.SetProperty(game => game.GameName, updatedGame.GameName)
+        .SetProperty(game => game.Genre, updatedGame.Genre)
+        .SetProperty(game => game.Price, updatedGame.Price)
+        .SetProperty(game => game.ReleaseDate, updatedGame.ReleaseDate) );
+
+    if(rowsAffected == 0)
     {
-        //we could create one with the new id, or return a 404 instead
-        //return Results.NotFound();
-        updatedGame.Id  = id;
-        _games.Add(updatedGame);
-        return Results.CreatedAtRoute(getNameAPIFuncRouteEndpointStr, new {id = updatedGame.Id} , updatedGame);
+        return Results.NotFound();
+        //we can not create a game with a user specified Id, the db auto increments the Id
+        // updatedGame.Id  = id;
+        // context.Games.Add(updatedGame);
+        // await context.SaveChangesAsync();
+        // return Results.CreatedAtRoute(getNameAPIFuncRouteEndpointStr, new {id = updatedGame.Id} , updatedGame);
     }
-    //Update the existing games fields with the new values
-    game.GameName = updatedGame.GameName;
-    game.Genre = updatedGame.Genre;
-    game.Price = updatedGame.Price;
-    game.ReleaseDate = updatedGame.ReleaseDate;
-    return Results.NoContent(); //could also return Results.Ok(game) but apparently this is the convention
+    return Results.NoContent(); 
 });
 
 //DELETE /games/{id} (delete)
-routeGroup.MapDelete("/{id}", (int id) =>
+routeGroup.MapDelete("/{id}", async (GameCatalogueContext context,int id) =>
 {
-    Game? game = _games.Find(game => game.Id == id);
-    if(game is null)
-    {
-      //Can return either a 404 or a 204 
-      return Results.NotFound();
-      //return Results.NoContent();
-    }
-    _games.Remove(game);
-    return Results.NoContent();
+    var rowsAffected = await context.Games.Where(game => game.Id == id).ExecuteDeleteAsync();
+    return rowsAffected == 0 ? Results.NotFound() : Results.NoContent();
 });
 
 app.Run();
