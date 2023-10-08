@@ -11,6 +11,15 @@
 	<div class="col-sm-6">
 		<button type ="button" class="btn btn-primary" @onclick="CreateGame">Create New Game</button>
 	</div>
+	<div class="col">
+		<input type="text" 
+			class="form-control"
+		 	placeholder="Search by Name / Genre" 
+		 	@bind-value="searchString" 
+		 	@bind-value:event="oninput" 
+		 	@onkeyup="FetchGamesAsync"
+		 />
+	</div>
 </div>
 
 <h1>Game Catalogue</h1>
@@ -61,16 +70,18 @@ else
 	</table>
 }
 
-<!-- Code section for C# If formatting is fucking up from IDE, set "editor.formatOnSave": false, in settings.json-->
+<!-- Code section for C# If formatting is messing up from IDE, set "editor.formatOnSave": false, in settings.json-->
 @code
 {
 	private Game[]? games; //Nullable array on construction
 	private Game? currentGame;
 
+	private string? searchString; //an optional filter to pass in to find games by name/genre that contain string
+
     protected override async Task OnInitializedAsync()
     {
 		//when you await a task, it returns the .Result automatically as the specified Type aka Game[] (which is nullable)
-      games = await GameClient.GetGamesAsync();
+     	await FetchGamesAsync();
     }
 
 	 private void CreateGame()
@@ -88,8 +99,13 @@ else
 		if(cond)
 		{
 			await GameClient.DeleteGameAsync(currentGame!.Id);
-			games = await GameClient.GetGamesAsync();
+			await FetchGamesAsync();
 		}
+	 }
+
+	 private async Task FetchGamesAsync()
+	 {
+			games = await GameClient.GetGamesAsync(searchString);
 	 }
 
 }

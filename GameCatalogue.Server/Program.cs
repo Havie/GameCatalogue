@@ -39,7 +39,15 @@ routeGroup.MapPost("/", async (GameCatalogueContext context, Game game) =>
 });
 
 //GET /games (read)
-routeGroup.MapGet("/", async (GameCatalogueContext context) => await context.Games.AsNoTracking().ToListAsync());
+routeGroup.MapGet("/", async (GameCatalogueContext context, string? filter) => 
+{
+  var games = context.Games.AsNoTracking();
+  if(filter is not null)
+  {
+    games = games.Where(game => game.GameName.Contains(filter) || game.Genre.Contains(filter));
+  }
+  return await games.ToListAsync();
+});
 
 //GET /games/{id} (read)
 routeGroup.MapGet("/{id}", async (GameCatalogueContext context, int id) =>
@@ -59,7 +67,7 @@ routeGroup.MapPut("/{id}",  async (GameCatalogueContext context, int id, Game up
 {
 
   //Update the existing games fields with the new values
-  var rowsAffected = await context.Games.Where(game => game.Id == id)  //oof I hate this syntax
+  var rowsAffected = await context.Games.Where(game => game.Id == id)  //oof not the biggest fan of this syntax
   .ExecuteUpdateAsync(updates =>
       updates.SetProperty(game => game.GameName, updatedGame.GameName)
         .SetProperty(game => game.Genre, updatedGame.Genre)

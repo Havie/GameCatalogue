@@ -8,6 +8,9 @@ GET {{baseURL}}/games
 ### 
 GET {{baseURL}}/games/4
 
+### search by name/genre
+GET {{baseURL}}/games?filter=test
+
 ### 
 POST {{baseURL}}/games
 content-type: application/json
